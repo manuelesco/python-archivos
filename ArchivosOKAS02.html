@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Archivos de txt y csv</title>
+	
+	<!-- Tabler Icons — siempre antes de tu CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --python-blue: #306998; --python-blue-light: #4B8BBE; --python-blue-dark: #265577;
+            --python-yellow: #FFD43B; --python-yellow-light: #FFE873; --python-yellow-dark: #E5BE01;
+            --bg-dark: #1a1a2e; --bg-card: #16213e; --bg-code: #0f0f23;
+            --text-light: #e0e0e0; --text-muted: #a0a0b8;
+            --success: #4caf50; --error: #f44336; --warning: #ff9800;
+            --border-radius: 12px; --shadow: 0 8px 32px rgba(0,0,0,0.3);
+			--color-rojo: red;
+			--color-blanco: white;
+			--color-green: green;
+        }
+		p {
+			text-align: justify;
+		}
+		
+		.text-center { text-align: center; }
+		
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-light); line-height: 1.7; min-height: 100vh; }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--python-blue); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--python-blue-light); }
+
+        header { background: linear-gradient(135deg, var(--python-blue-dark) 0%, var(--python-blue) 50%, var(--python-yellow-dark) 100%); padding: 40px 20px; text-align: center; position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,212,59,0.1) 0%, transparent 60%); animation: pulse 8s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+        .logo-container { display: inline-flex; align-items: center; gap: 15px; margin-bottom: 20px; position: relative; z-index: 1; }
+        .python-logo-svg { width: 100px; height: 100px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        header h1 { font-size: 2.5em; font-weight: 800; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1; }
+        header h1 span.blue { color: var(--python-yellow); }
+        header h1 span.yellow { color: var(--python-blue-light); }
+        header p { font-size: 1.2em; color: rgba(255,255,255,0.85); margin-top: 10px; position: relative; z-index: 1; }
+
+        nav { background: var(--bg-card); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.4); border-bottom: 2px solid var(--python-blue); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; }
+        .nav-btn { background: transparent; color: var(--text-light); border: 1px solid rgba(48,105,152,0.4); padding: 7px 13px; border-radius: 25px; cursor: pointer; font-size: 0.8em; transition: all 0.3s ease; white-space: nowrap; }
+        .nav-btn:hover, .nav-btn.active { background: var(--python-blue); border-color: var(--python-yellow); color: var(--python-yellow); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(48,105,152,0.4); }
+        .progress-bar { width: 100%; max-width: 1200px; margin: 10px auto 0; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--python-blue), var(--python-yellow)); width: 0%; transition: width 0.5s ease; border-radius: 2px; }
+        .progress-text { text-align: center; font-size: 0.75em; color: var(--text-muted); margin-top: 4px; }
+
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .section-title { font-size: 2em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .section-title .icon { width: 45px; height: 45px; background: linear-gradient(135deg, var(--python-blue), var(--python-yellow)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3em; flex-shrink: 0; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1em; margin-bottom: 30px; padding-left: 57px; }
+
+        .card { background: var(--bg-card); border-radius: var(--border-radius); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(48,105,152,0.2); transition: transform 0.3s ease, border-color 0.3s ease; }
+        .card:hover { border-color: rgba(255,212,59,0.3); }
+        .card h3 { color: var(--python-yellow); font-size: 1.3em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+		.card h3.sub{ color: var(--python-blue); font-size: 1.3em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .card p, .card li { color: var(--text-muted); margin-bottom: 8px; }
+        .card ul { padding-left: 20px; }
+        .card ul li { margin-bottom: 5px; }
+        .highlight { color: var(--python-yellow); font-weight: 600; }
+		.warning { color: var(--color-rojo); font-weight: 600; }
+		.numpy { color: rgb(77, 119, 207); font-weight: 600; }
+
+        .code-block { background: var(--bg-code); border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(48,105,152,0.3); }
+        .code-header { background: rgba(48,105,152,0.3); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .code-header span { font-size: 0.8em; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .code-dots { display: flex; gap: 6px; }
+        .code-dots span { width: 12px; height: 12px; border-radius: 50%; }
+        .code-dots span:nth-child(1) { background: #ff5f56; }
+        .code-dots span:nth-child(2) { background: #ffbd2e; }
+        .code-dots span:nth-child(3) { background: #27c93f; }
+        .code-body { padding: 15px 20px; overflow-x: auto; }
+        .code-body pre { margin: 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.8; }
+        .kw { color: #c792ea; font-weight: bold; }
+        .fn { color: #82aaff; }
+        .st { color: #c3e88d; }
+        .cm { color: #546e7a; font-style: italic; }
+        .nb { color: #89ddff; }
+        .num { color: #f78c6c; }
+        .op { color: #89ddff; }
+        .var { color: #ffcb6b; }
+        .bool { color: #ff5370; font-weight: bold; }
+        .indent { display: inline-block; width: 4ch; }
+
+        .output-block { background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.3); border-radius: 8px; padding: 12px 18px; margin-top: 10px; font-family: 'Consolas', monospace; font-size: 0.9em; color: var(--success); }
+        .output-block .output-label { font-size: 0.75em; color: var(--success); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: 600; }
+
+        .demo-container { background: linear-gradient(135deg, rgba(48,105,152,0.15), rgba(255,212,59,0.05)); border: 2px solid var(--python-blue); border-radius: var(--border-radius); padding: 25px; margin: 25px 0; }
+        .demo-title { color: var(--python-yellow); font-size: 1.1em; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .demo-input-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .demo-input-group label { font-size: 0.9em; color: var(--text-muted); min-width: 120px; }
+        .demo-input { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.4); color: var(--text-light); padding: 10px 15px; border-radius: 8px; font-size: 0.95em; font-family: 'Consolas', monospace; outline: none; transition: border-color 0.3s; min-width: 150px; }
+        .demo-input:focus { border-color: var(--python-yellow); box-shadow: 0 0 10px rgba(255,212,59,0.2); }
+        .demo-select { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.4); color: var(--text-light); padding: 10px 15px; border-radius: 8px; font-size: 0.95em; outline: none; cursor: pointer; min-width: 150px; }
+        .demo-select:focus { border-color: var(--python-yellow); }
+        .demo-select option { background: var(--bg-code); color: var(--text-light); }
+        .run-btn { background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .run-btn:hover { background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.3); }
+        .demo-output { background: var(--bg-code); border-radius: 8px; padding: 15px; margin-top: 15px; font-family: 'Consolas', monospace; font-size: 0.9em; min-height: 50px; border: 1px solid rgba(48,105,152,0.2); white-space: pre-wrap; transition: border-color 0.3s; }
+        .demo-output.has-output { border-color: var(--python-yellow); }
+
+        /* QUIZ — nuevo diseño */
+        .quiz-card { background: var(--bg-card); border: 1px solid rgba(48,105,152,0.3); border-radius: 14px; padding: 24px; margin-top: 20px; }
+        .quiz-q { font-size: 1rem; font-weight: 600; color: var(--text-light); margin-bottom: 16px; line-height: 1.5; }
+        .quiz-options { display: grid; gap: 10px; }
+        .quiz-opt { background: rgba(48,105,152,0.1); border: 2px solid rgba(48,105,152,0.3); border-radius: 10px; padding: 12px 16px; cursor: pointer; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.88rem; color: var(--text-light); text-align: left; transition: all 0.2s; }
+        .quiz-opt:hover { border-color: var(--python-blue-light); background: rgba(48,105,152,0.2); }
+        .quiz-opt.correct { border-color: var(--success); background: rgba(76,175,80,0.15); color: var(--success); }
+        .quiz-opt.wrong { border-color: var(--error); background: rgba(244,67,54,0.1); color: var(--error); }
+        .quiz-feedback { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); color: var(--success); }
+        .quiz-feedback.fail { background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.3); color: var(--error); }
+        .quiz-next { margin-top: 14px; background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); border: none; border-radius: 8px; padding: 10px 22px; font-weight: 700; cursor: pointer; display: none; transition: all 0.2s; font-size: 0.95em; }
+        .quiz-next.show { display: inline-block; }
+        .quiz-next:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.4); }
+
+        .flow-diagram { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 20px 0; padding: 20px; }
+        .flow-box { background: var(--bg-card); border: 2px solid var(--python-blue); border-radius: 10px; padding: 12px 25px; text-align: center; font-weight: 600; position: relative; min-width: 200px; }
+        .flow-box.start { border-radius: 25px; background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); border-color: var(--python-blue-light); }
+        .flow-box.decision { border-color: var(--python-yellow); background: rgba(255,212,59,0.1); color: var(--python-yellow); border-radius: 10px; padding: 15px 25px; min-width: 200px; }
+        .flow-box.action { border-color: var(--python-blue-light); background: rgba(75,139,190,0.1); }
+        .flow-box.end { border-radius: 25px; background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); border-color: var(--python-yellow); color: var(--bg-dark); }
+        .flow-arrow { width: 2px; height: 30px; background: var(--text-muted); position: relative; }
+        .flow-arrow::after { content: '▼'; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); color: var(--text-muted); font-size: 0.7em; }
+        .flow-label { font-size: 0.8em; color: var(--python-yellow); font-weight: 600; margin: 5px 0; }
+        .flow-branch { display: flex; gap: 40px; align-items: flex-start; margin: 10px 0; }
+        .flow-branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+        .comparison-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; margin: 20px auto; border-radius: 10px; overflow: hidden; border: 1px solid rgba(48,105,152,0.3); }
+        .comparison-table th { background: linear-gradient(135deg, var(--python-blue-dark), var(--python-blue)); color: var(--python-yellow); padding: 14px 18px; text-align: left; font-weight: 700; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}	
+        .comparison-table td { background: var(--bg-card); padding: 12px 18px; border-bottom: 1px solid rgba(48,105,152,0.15); font-size: 0.9em; }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: rgba(48,105,152,0.1); }
+        .comparison-table code { background: rgba(255,212,59,0.1); color: var(--python-yellow); padding: 2px 8px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+
+        .tip-box { background: rgba(255,212,59,0.08); border-left: 4px solid var(--python-yellow); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        .tip-box .tip-title { color: var(--python-yellow); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tip-box p { color: var(--text-muted); font-size: 0.95em; }
+        .warning-box { background: rgba(244,67,54,0.08); border-left: 4px solid var(--error); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        <!-- .warning-box .warning-title { color: var(--error); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; } -->
+		.warning-box .warning-title { color: var(--color-rojo); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+		.warning-box p { color: #fef08a; font-size: 0.95em; }
+		.note-box { background: rgba(255,212,59,0.08); border-left: 4px solid var(--color-green); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        .note-box .note-title { color: var(--color-green); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .note-box p { color: var(--text-muted); font-size: 0.95em; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(48,105,152,0.2); }
+        .nav-arrow-btn { background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); color: #fff; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .nav-arrow-btn:hover { background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.3); }
+        .nav-arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .score-panel { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 2px solid var(--python-yellow); border-radius: 15px; padding: 15px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); z-index: 999; min-width: 180px; }
+        .score-panel .score-label { font-size: 0.75em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .score-panel .score-value { font-size: 2em; font-weight: 800; color: var(--python-yellow); line-height: 1; }
+        .score-panel .score-total { font-size: 0.85em; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.85em; border-top: 1px solid rgba(48,105,152,0.2); margin-top: 40px; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; } 
+			.section-title { font-size: 1.5em; } 
+			.section-subtitle { padding-left: 0; }
+            .nav-container { gap: 5px; } 
+			.nav-btn { padding: 6px 12px; font-size: 0.75em; } 
+			.code-body pre { font-size: 0.8em; }
+            .demo-input-group { flex-direction: column; align-items: stretch; } 
+			.demo-input-group label { min-width: auto; }
+            .flow-branch { flex-direction: column; gap: 15px; } 
+			.score-panel { bottom: 10px; right: 10px; padding: 10px 15px; min-width: 140px; }
+            .score-panel .score-value { font-size: 1.5em; } .python-logo-svg { width: 80px; height: 80px; }
+			.footer-logo-space img { height: 45px; }
+        }
+
+        .bounce-in { animation: bounceIn 0.6s ease; }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+
+        .challenge-box { background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(244,67,54,0.05)); border: 2px solid var(--warning); border-radius: var(--border-radius); padding: 25px; margin: 25px 0; }
+        .challenge-box .challenge-title { color: var(--warning); font-size: 1.1em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .challenge-box p { color: var(--text-muted); margin-bottom: 10px; }
+        .mini-editor { background: var(--bg-code); border-radius: 10px; border: 1px solid rgba(48,105,152,0.3); overflow: hidden; margin: 15px 0; }
+        .mini-editor-header { background: rgba(48,105,152,0.3); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .mini-editor-header span { font-size: 0.8em; color: var(--text-muted); font-weight: 600; }
+        .editor-instructions { background: rgba(255,212,59,0.06); border-bottom: 1px solid rgba(48,105,152,0.2); padding: 12px 18px; font-family: 'Consolas', monospace; font-size: 0.85em; color: var(--text-muted); line-height: 1.8; white-space: pre; user-select: text; -webkit-user-select: text; }
+        .editor-instructions .instruction-line { color: #546e7a; font-style: italic; }
+        .editor-instructions .instruction-var { color: #ffcb6b; }
+        .mini-editor textarea { width: 100%; min-height: 280px; background: transparent; border: none; color: var(--text-light); font-family: 'Consolas', monospace; font-size: 0.9em; padding: 15px; resize: vertical; outline: none; line-height: 1.8; tab-size: 4; }
+        .mini-editor textarea::placeholder { color: rgba(160,160,184,0.3); }
+        .mini-editor-footer { padding: 10px 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-top: 1px solid rgba(48,105,152,0.2); }
+        .editor-output { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.2); border-radius: 8px; padding: 12px 15px; font-family: 'Consolas', monospace; font-size: 0.85em; min-height: 40px; margin-top: 10px; white-space: pre-wrap; color: var(--text-muted); }
+        .editor-output.success { border-color: rgba(76,175,80,0.4); color: var(--success); }
+        .editor-output.error { border-color: rgba(244,67,54,0.4); color: var(--error); }
+        .steps { display: flex; justify-content: center; gap: 5px; margin: 20px 0; flex-wrap: wrap; }
+        .step-dot { width: 35px; height: 35px; border-radius: 50%; background: rgba(48,105,152,0.2); border: 2px solid rgba(48,105,152,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
+        .step-dot.completed { background: var(--python-blue); border-color: var(--python-blue-light); color: #fff; }
+        .step-dot.current { background: var(--python-yellow); border-color: var(--python-yellow); color: var(--bg-dark); transform: scale(1.2); }
+        .solution-toggle { background: none; border: 1px solid rgba(255,212,59,0.3); color: var(--python-yellow); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.3s ease; margin-top: 10px; }
+        .solution-toggle:hover { background: rgba(255,212,59,0.1); border-color: var(--python-yellow); }
+        .solution-content { display: none; margin-top: 10px; }
+        .solution-content.visible { display: block; }
+
+
+	
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 28px;
+		padding-bottom: 18px;
+		border-bottom: 1px solid var(--border);
+	}
+  
+	.section-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 22px;
+		flex-shrink: 0;
+	}
+
+	.icon-blue { background: rgba(48,105,152,0.25); border: 1px solid rgba(48,105,152,0.4); }
+	.icon-yellow { background: rgba(255,212,59,0.15); border: 1px solid rgba(255,212,59,0.3); }
+	.icon-green { background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.3); }
+	.icon-red { background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.3); }
+	.icon-purple { background: rgba(210,168,255,0.15); border: 1px solid rgba(210,168,255,0.3); }
+	.icon-orange { background: rgba(240,136,62,0.15); border: 1px solid rgba(240,136,62,0.3); }
+	
+	.section-header-text h2 {
+		font-size: 1.7rem;
+		font-weight: 700;
+		letter-spacing: -0.5px;
+	}
+	
+	.section-header-text p {
+		color: var(--text-dim);
+		font-size: 0.9rem;
+		margin-top: 4px;
+	}
+	
+	/* COMPARISON TABLE */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+
+  .cmp-table th {
+    background: var(--py-blue);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .cmp-table th:first-child { border-radius: 10px 0 0 0; }
+  .cmp-table th:last-child { border-radius: 0 10px 0 0; }
+
+  .cmp-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .cmp-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .cmp-table tr:hover td { background: rgba(48,105,152,0.08); }
+  .cmp-table td:first-child { font-family: 'JetBrains Mono', monospace; color: var(--py-yellow); font-weight: 700; }
+  
+  /* ANCHO DE LA TABLA */
+	.comparison-table.table-compact th,
+	.comparison-table.table-compact td {
+		font-size: 0.9em;
+		padding: 12px 18px;
+		white-space: nowrap;
+	}
+
+    /* SECCIÓN EXPANDIBLE */
+	.expandable-card { cursor: pointer; transition: all 0.3s ease; }
+	.expandable-card:hover { transform: translateX(5px); }
+	.expandable-card .expandable-details { display: none; margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--python-blue); }
+	.expandable-card.expanded .expandable-details { display: block; animation: fadeIn 0.3s ease; }
+	.expandable-card h3::after { content: " ▶"; font-size: 0.8em; margin-left: auto; }
+	.expandable-card.expanded h3::after { content: " ▼"; }
+
+    /* ── Prism syntax highlighting ── */
+    .snippet-tag {
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: .72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .tag-output { background: rgba(76,175,80,.15); color: #4caf50; }
+
+    .output-bar { border-top: 1px solid rgba(48,105,152,0.3); justify-content: flex-end; }
+
+    /* code-wrap: columna de números + bloque de código */
+    .code-wrap {
+      display: flex;
+      overflow-x: auto;
+    }
+    .line-numbers-col {
+      flex-shrink: 0;
+      background: rgba(48,105,152,0.15);
+      border-right: 1px solid rgba(48,105,152,0.3);
+      padding: 15px 12px 15px 14px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 0.9em;
+      line-height: 1.8;
+      color: #445566;
+      text-align: right;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+    .line-numbers-col span { display: block; }
+    .code-wrap pre[class*="language-"] {
+      flex: 1;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      padding: 15px 20px !important;
+      background: transparent !important;
+      font-family: 'Consolas','Monaco','Courier New',monospace !important;
+      font-size: 0.9em !important;
+      line-height: 1.8 !important;
+      overflow-x: visible;
+    }
+
+    /* Prism token overrides */
+    .token.comment,.token.prolog,.token.doctype { color: #546e7a !important; font-style: italic; }
+    .token.keyword  { color: #c792ea !important; font-weight: bold; }
+    .token.builtin  { color: #89ddff !important; }
+    .token.string,.token.char { color: #c3e88d !important; }
+    .token.number   { color: #f78c6c !important; }
+    .token.function { color: #82aaff !important; }
+    .token.class-name { color: #89ddff !important; font-weight: 600; }
+    .token.decorator,.token.at-rule { color: #4ade80 !important; }
+    .token.boolean  { color: #ff5370 !important; font-weight: bold; }
+    .token.operator { color: #89ddff !important; }
+    .token.punctuation { color: #89ddff !important; }
+
+    /* output-body (debajo de la barra de salida) */
+    .output-body {
+      background: rgba(0,0,0,0.25);
+      padding: 12px 20px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 0.9em;
+      line-height: 1.8;
+    }
+	
+	.output-body pre {
+		color: #4ade80;
+	}
+    .output-line { display: block; color: var(--success); }
+    .output-line::before { content: '>>> '; color: rgba(160,160,184,0.5); user-select: none; }
+	
+	/* output-body-file (debajo de la barra de salida) */
+    .output-body-file {
+      background: #E8DFC8;
+      padding: 12px 20px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 1.1em;
+      line-height: 1.8;
+    }
+	
+	.output-body-file pre {
+		color: #2E2416;
+	}
+
+    /* ── section heading ── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      margin-top: 48px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--python-yellow);
+      border-radius: 2px;
+    }
+
+
+/* ───────────────────────────────────────── */
+/* ESTILOS TIPO python_syntax_OKAS.html      */
+/* ───────────────────────────────────────── */
+
+.snippet {
+  background: var(--bg-card);
+  border: 1px solid rgba(48,105,152,0.25);
+  border-radius: 12px;
+  margin-bottom: 32px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.snippet:hover {
+  border-color: rgba(255,212,59,.35);
+  box-shadow: 0 0 32px rgba(255,212,59,.06);
+}
+
+.snippet-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(48,105,152,0.25);
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+}
+
+.dots span:nth-child(1) { background: #ff5f57; }
+.dots span:nth-child(2) { background: #febc2e; }
+.dots span:nth-child(3) { background: #28c840; }
+
+.snippet-title {
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .8rem;
+  color: var(--text-muted);
+  flex: 1;
+  text-align: center;
+}
+
+.snippet-tag {
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .72rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.tag-fn {
+  background: rgba(92,216,247,.15);
+  color: #5cd8f7;
+}
+
+.tag-output {
+  background: rgba(74,222,128,.15);
+  color: #4ade80;
+}
+
+.tag-file {
+  background: rgba(251,146,60,.15);
+  color: #fb923c;
+}
+
+.output-bar {
+  border-top: 1px solid rgba(48,105,152,0.25);
+  justify-content: flex-end;
+}
+
+.snippet pre[class*="language-"] {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding: 22px 24px !important;
+  background: transparent !important;
+  font-family: 'Consolas','Monaco','Courier New',monospace !important;
+  font-size: .85rem !important;
+  line-height: 1.75 !important;
+  overflow-x: auto;
+}
+
+.output-body {
+  background: #0a0c10;
+  padding: 16px 24px;
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .85rem;
+  line-height: 1.75;
+}
+
+.output-line {
+  display: block;
+  color: #4ade80;
+}
+
+.output-line::before {
+  content: '>>> ';
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.code-wrap {
+  display: flex;
+  overflow-x: auto;
+}
+
+.line-numbers-col {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(48,105,152,0.25);
+  padding: 22px 14px 22px 16px;
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .85rem;
+  line-height: 1.75;
+  color: #3d4a6a;
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.line-numbers-col span {
+  display: block;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  margin-top: 48px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--python-yellow);
+  border-radius: 2px;
+}
+
+/***FOOTER***/
+	.footer-m365 {
+    background: linear-gradient(
+        180deg,
+        #0d1230 0%, 
+		#060a1a 100%
+    );
+    /*border-top: 1px solid #edebe9;*/
+    padding: 10px 5%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+  .footer-content{
+    max-width:900px;      /* mismo ancho que main */
+    margin:0 auto;
+    padding:10px 20px;
+}
+  .footer-m365-label {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7fb8d9;           /* azul-gris suave, legible sobre fondo oscuro, sin competir con el título */
+    opacity: 0.85;
+    margin-bottom: 15px;
+  }
+  .footer-m365-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #eaf6ff;           /* blanco-azulado, casi blanco, para máximo contraste y jerarquía */
+    text-shadow: 0 0 12px rgba(58, 214, 245, 0.15); /* un glow cian sutil, conecta con el brillo de los logos */
+	margin-bottom: 0px;
+  }
+
+
+.footer-top-bar{
+  height:3px;
+  background:linear-gradient(90deg,#0a2e6b 0%,#1a55d6 45%,#11c9f5 100%);
+}
+
+.footer-bottom-bar{
+  height:3px;
+  background:linear-gradient(90deg,#11c9f5 0%,#1a55d6 55%,#0a2e6b 100%);
+}
+
+.footer-banner{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:0px 0px;
+  padding-bottom: 10px;
+}
+.footer-logo-space{
+  /*width:55px;
+  height:65px;*/
+  display:flex;
+  flex-direction: row;   /* logo arriba, nombre abajo, en vez de lado a lado */
+  align-items:center;
+  justify-content:center;
+}
+.footer-logo-space img{
+  filter: drop-shadow(0 0 6px rgba(58, 214, 245, 0.25));
+  height: 34px;
+  width: auto;
+}
+.footer-logo-space .name{
+  font-size: 1rem;
+  font-weight:700;
+  background: linear-gradient(to right, #0a3d91, #1a6dd4, #3ad6f5);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.footer-divider{
+  width:2px;
+  height:60px;
+  background:linear-gradient(to bottom,#0a2e6b,#1a55d6,#11c9f5);
+}
+.footer-text{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap:wrap;
+}
+.footer-text .label{
+  font-size: 1rem;
+  font-weight:700;
+  padding-left: 25px;
+  color:#8fb8d9;
+}
+.footer-text .name{
+  font-size: 1rem;
+  font-weight:700;
+  /* background:linear-gradient(to right, #0a3d91, #1a6dd4); */
+  background: repeating-linear-gradient(to right, #0a3d91 0%, #1a6dd4 55%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+</style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="python-logo-svg" viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="pyBlueGrad" x1="12.961%" y1="0.475%" x2="99.844%" y2="99.675%"><stop offset="0%" stop-color="#387EB8"/><stop offset="100%" stop-color="#366994"/></linearGradient>
+                    <linearGradient id="pyYellowGrad" x1="12.961%" y1="0.475%" x2="99.844%" y2="99.675%"><stop offset="0%" stop-color="#FFD43B"/><stop offset="100%" stop-color="#FFE873"/></linearGradient>
+                </defs>
+                <path d="M126.916 0C62.366 0 66.173 28.423 66.173 28.423L66.274 57.564H128.183V68.615H31.131C31.131 68.615 0.085 65.185 0.085 125.675C0.085 186.164 26.773 185.833 26.773 185.833H53.592V158.615C53.592 158.615 53.238 131.22 81.577 131.22H184.388C184.388 131.22 209.822 131.832 209.822 105.038V35.156C209.822 35.156 213.486 0 126.916 0ZM93.314 20.983C99.709 20.983 104.897 26.17 104.897 32.565C104.897 38.96 99.709 44.147 93.314 44.147C86.919 44.147 81.733 38.96 81.733 32.565C81.733 26.17 86.919 20.983 93.314 20.983Z" fill="url(#pyBlueGrad)"/>
+                <path d="M128.76 254.684C193.309 254.684 189.503 226.261 189.503 226.261L189.402 197.12H127.493V186.069H224.545C224.545 186.069 255.591 189.499 255.591 129.01C255.591 68.52 228.903 68.851 228.903 68.851H202.084V96.07C202.084 96.07 202.438 123.464 174.099 123.464H71.289C71.289 123.464 45.854 122.852 45.854 149.646V219.528C45.854 219.528 42.19 254.684 128.76 254.684ZM162.361 233.701C155.966 233.701 150.779 228.514 150.779 222.119C150.779 215.724 155.966 210.537 162.361 210.537C168.756 210.537 173.942 215.724 173.942 222.119C173.942 228.514 168.756 233.701 162.361 233.701Z" fill="url(#pyYellowGrad)"/>
+            </svg>
+        </div>
+        <h1>Fundamentos de Programación en <span class="blue">Python</span></h1>
+        <p class="text-center">
+			Tutorial · Aprende <span class="yellow">archivos txt y csv</span>
+		</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="goToSection(0)">🏠 Inicio</button>
+            <button class="nav-btn" onclick="goToSection(1)">1 📂 Apertura de Archivos</button>
+			<button class="nav-btn" onclick="goToSection(2)">2 <i class="ti ti-file-type-txt"></i> Archivos de texto</button>
+            <button class="nav-btn" onclick="goToSection(3)">3 <i class="ti ti-file-type-csv"></i> Archivos csv</button>          
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Sección 1 de 4</div>
+    </nav>
+
+    <main>
+		<!-- ================================================== -->
+		<!-- ===================== INICIO ===================== -->
+		<!-- ================================================== -->
+        <div class="section active" id="section-0">           			
+			<div class="section-header">
+				<div class="section-icon icon-blue">🏠</div>
+				<div class="section-header-text">
+					<h2>Manejo de Archivos</h2>
+					<p>Lee y escribe archivos de texto y CSV</p>
+				</div>
+			</div>
+			
+			<div class="card">		
+				<p>
+					Trabajar con archivos es una habilidad fundamental en cualquier lenguaje de programación. En Python, el manejo de archivos es especialmente sencillo y expresivo. Los dos tipos más comunes en el mundo del desarrollo y análisis de datos son:
+					<ul>
+						<li>
+							<strong>Archivos de texto plano (<code>.txt</code>)</strong> — almacenan datos como secuencias 
+							de caracteres legibles.
+						</li>
+						<li><strong>Archivos CSV (<code>.csv</code>)</strong> — Comma-Separated Values (Valores Separados 
+							por Comas), un estándar para tablas de datos donde cada fila es una línea y los valores se 
+							separan por comas (u otro delimitador).
+						</li>
+					</ul>
+				</p>
+				<p>
+					<span class="highlight">Python</span> ofrece herramientas nativas para ambos: la función built-in 
+					<code>open()</code> para texto, y el módulo estándar <code>csv</code> para archivos CSV.
+				</p>				
+			</div>
+			
+			
+            
+            <div class="nav-buttons"><button class="nav-arrow-btn" disabled>🏠 Inicio</button><button class="nav-arrow-btn" onclick="goToSection(1)">Siguiente: Apertura de Archivos →</button></div>
+        </div>
+		
+		<!-- ================================================================ -->
+		<!-- ===================== APERTURA DE ARCHIVOS ===================== -->
+		<!-- ================================================================ -->
+        <div class="section" id="section-1">           			
+			<div class="section-header">
+				<div class="section-icon icon-blue">📂</div>
+				<div class="section-header-text">
+					<h2>Apertura de Archivos</h2>
+					<p>Conoce la función <code>open()</code></p>
+				</div>
+			</div>
+			
+			<div class="card">
+				<h3>📂 Apertura de Archivos</h3>
+				<p>
+					La función integrada <code>open()</code> <strong>abre un archivo</strong> y regresa un 
+					<strong>objeto de archivo</strong> (<em>file object</em>) con el que puedes leer, escribir o manipular
+					su contenido. No lee ni escribe nada por sí sola, simplemente establece la conexión entre tu programa y 
+					el archivo en el disco. Una vez abierto, debes usar los métodos del objeto (<code>read()</code>, 
+					<code>write()</code>, etc.) para trabajar con él.
+				</p>
+				<br>
+				<p>
+					La forma moderna y segura de abrir archivos en Python es utilizando la sentencia <code>with</code>, que 
+					trabaja con un <strong>gestor de contexto</strong> (<em>context manager</em>) que se encarga de ejecutar 
+					acciones de configuración al entrar en el bloque y de limpieza al salir, sin importar si ocurre un error o no.
+					<br>
+					También garantiza que el archivo se cierre automáticamente al terminar el bloque <code>with</code>, 
+					aunque ocurra una excepción. Elimina la necesidad de llamar <code>archivo.close()</code> manualmente.
+				</p>
+			
+			</div>
+			
+			<div class="card">
+				<h3 class="sub">🔤 Sintaxis</h3>
+<pre>
+<code class="language-python">with open(file, mode='r', encoding=None, errors=None) as variable_archivo:
+	# Bloque de código para trabajar con el archivo
+	...
+
+# Aquí el archivo ya fue cerrado automáticamente</code>
+</pre>
+				<p>
+					Donde:
+				</p>
+				<table class="comparison-table table-compact">
+					<thead>
+						<tr>
+							<th>Parámetro</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<code>file</code>
+							</td>
+							<td>
+								Ruta del archivo (relativa o absoluta)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>mode</code>
+							</td>
+							<td>
+								Modo de apertura
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>encoding</code>
+							</td>
+							<td>
+								Codificación del texto (<code>'utf-8'</code>, <code>'latin-1'</code>, etc.)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>errors</code>
+							</td>
+							<td>
+								Qué hacer con errores de codificación (<code>'strict'</code>, <code>'ignore'</code>,  
+								<code>'replace'</code>)
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+				
+			<div class="card">
+				<h3 class="sub">🔓 Modos de apertura</h3>
+				<table class="comparison-table table-compact">
+					<thead>
+						<tr>
+							<th>Modo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<code>'r'</code>
+							</td>
+							<td>
+								<strong>Lectura</strong> (default). Error si el archivo no existe.
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'w'</code>
+							</td>
+							<td>
+								<strong>Escritura</strong>. Crea el archivo o <strong>lo sobreescribe</strong> si existe.
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'a'</code>
+							</td>
+							<td>
+								<strong>Añadir (Append)</strong>. Escribe al final. Crea el archivo si no existe.
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'x'</code>
+							</td>
+							<td>
+								<strong>Creación exclusiva</strong>. Error si el archivo ya existe.
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'r+'</code>
+							</td>
+							<td>
+								Lectura y escritura. El archivo debe existir.
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'b'</code>
+							</td>
+							<td>
+								Modo binario (se combina: <code>'rb'</code>, <code>'wb'</code>).
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>'t'</code>
+							</td>
+							<td>
+								Modo texto (default, se combina: <code>'rt'</code>).
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			
+            
+            <div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(0)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(2)">Siguiente: Archivos de Texto →</button></div>
+        </div>
+
+		<!-- ===================================================================== -->
+		<!-- ========================= ARCHIVOS DE TEXTO ========================= -->
+		<!-- ===================================================================== -->
+        <div class="section" id="section-2">
+			<div class="section-header">
+				<div class="section-icon icon-blue"><i class="ti ti-file-type-txt"></i></div>
+				<div class="section-header-text">
+					<h2>Archivos de Texto</h2>
+					<p>Lee y escribe archivos <code>.txt</code></p>
+				</div>
+			</div>
+			
+			<div class="card">
+				<p>
+					Un archivo de texto plano contiene caracteres legibles por humanos organizados en líneas. En Python, 
+					la manipulación de archivos se basa en el concepto de <strong>manejadores de archivos</strong> 
+					(<strong><em>file handlers</em></strong>) o <strong>flujos de datos</strong> (<strong></em>streams</em></strong>).
+				</p>
+				<p>
+					Para interactuar con un archivo, debemos seguir un ciclo de vida:
+					<ol style="padding-left: 30px;">
+						<li>
+							<strong>Abrir</strong> el archivo especificando la ruta (path) y el modo (lectura, escritura, etc.).
+						</li>
+						<li>
+							<strong>Procesar</strong> (leer el contenido o escribir datos en él).
+						</li>
+						<li>
+							<strong>Cerrar</strong> el archivo para liberar los recursos del sistema operativo.
+						</li>
+					</ol>
+				</p>
+			</div>	
+			
+			
+			<div class="card">
+				<h3>✍️ Escritura de archivos de texto</h3>
+				<p>
+					<h3 class="sub"><code>🔧 write()</code></h3>
+					
+					Escribe una cadena de texto en el archivo. Regresa un número entero con la cantidad 
+					de caracteres escritos.
+					
+					
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "w", encoding="utf-8") as archivo:
+	archivo.write(cadena)</code>
+</pre>	
+						
+					Donde:
+					<br>
+					<code>cadena</code> es el texto <code>str</code> que se escribirá en el archivo. No agrega
+					<code>\n</code> automáticamente.
+				</p>
+			</div>
+			
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("saludo.txt", "w", encoding="utf-8") as archivo:
+	archivo.write("Hola, mundo\n")
+	archivo.write("Segunda línea\n")
+	archivo.write("Tercera línea\n")
+
+print("Archivo creado correctamente.")</code>
+</pre>
+						</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">saludo.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Hola, mundo
+Segunda línea
+Tercera línea
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+				
+			<div class="warning-box">
+				<div class="warning-title">⚠️ Advertencia:</div>
+				<p>
+					<code>write()</code> solo acepta cadenas (<code>str</code>). Si intentas escribir un número u 
+					otro tipo, lanzará un <code>TypeError</code>:
+<pre>
+<code class="language-python">f.write(42)        # ❌ TypeError
+f.write(str(42))   # ✅ Correcto</code>
+</pre>	
+				</p>
+			</div>
+					
+			<div class="note-box">
+				<div class="note-title">📝 Nota importante:</div>
+				<ul style="padding-left: 30px;">
+					<li>
+						<code>write()</code> <strong>No agrega salto de línea automáticamente.</strong> Si lo necesitas, 
+						inclúyelo tú: <code>"\n"</code>.
+					</li>
+					<li>
+						Escribe exactamente lo que le pases, sin modificaciones.
+					</li>
+				</ul>
+			</div>
+				
+				
+				
+			<div class="card">
+				<h3 class="sub"><code>🔧 writelines()</code></h3>
+				<p>
+					Escribe una lista (o cualquier iterable) de cadenas en el archivo, una tras otra. 
+					Regresa <code>None</code>.
+				
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "w", encoding="utf-8") as archivo:
+    archivo.writelines(iterable)</code>
+</pre>	
+					
+					Donde:
+					<br>
+					<code>iterable</code>: Lista, tupla o cualquier iterable de cadenas str.
+				</p>
+			</div>
+			
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">lineas = ["Manzana\n", "Plátano\n", "Cereza\n"]
+
+with open("frutas.txt", "w", encoding="utf-8") as archivo:
+	archivo.writelines(lineas)</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">frutas.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Manzana
+Banana
+Cereza
+</pre>
+					</div>
+				</div>
+			</div>
+				
+			<div class="note-box">
+				<div class="note-title">📝 Nota importante:</div>
+					<p>
+						<code>writelines()</code> <strong>No agrega salto de línea automáticamente.</strong> 
+						Debes incluir <code>\n</code> en cada elemento de la lista.
+					</p>
+			</div>
+			
+				
+				
+			<div class="card">
+				<h3 class="sub">Modo <code>'a'</code> - Agregar sin sobreescribir</h3>
+				<p>
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "a", encoding="utf-8") as archivo:
+    archivo.write(cadena)</code>
+</pre>					
+			</div> 
+			
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("frutas.txt", "a", encoding="utf-8") as archivo:
+    archivo.write("Durazno\n")
+    archivo.write("Fresa\n")</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">frutas.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Manzana
+Banana
+Cereza
+Durazno
+Fresa
+</pre>
+					</div>
+					<br>
+					<p>
+						El contenido anterior de <code>frutas.txt</code> se conserva y las nuevas líneas se 
+						agregan al final.
+					</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Lectura de archivos de texto</h3>
+				<p>
+					<h3 class="sub"><code>🔧️ read()</code></h3>
+					
+					Lee <strong>todo</strong> el contenido del archivo y lo regresa como <code>str</code> con todo el 
+					contenido leído.
+				
+				
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    contenido = archivo.read(size=-1)</code>
+</pre>	
+						
+					Donde:
+					<br>
+					<code>size</code>: Número de caracteres a leer. Sin argumento o -1 lee todo el 
+					archivo.
+				</p>
+			</div>
+					
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("saludo.txt", "r", encoding="utf-8") as archivo:
+    contenido = archivo.read()
+
+print(contenido)</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">saludo.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Hola, mundo
+Segunda línea
+Tercera línea
+</pre>
+					</div>
+				</div>
+			</div>
+			
+				
+			<div class="card">
+				<h3 class="sub"><code>🔧 readline()</code></h3>
+				<p>
+					Lee <strong>una línea</strong> del archivo cada vez que se llama, avanzando el cursor internamente.
+					<br>
+					Regresa <code>str</code> con la línea leída (incluye <code>\n</code>). Retorna <code>""</code> al 
+					llegar al final del archivo.
+				
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    linea = archivo.readline(size=-1)</code>
+</pre>	
+				
+					Donde:
+					<br>
+					<code>size</code>: Número máximo de caracteres a leer de la línea. Sin argumento lee la línea completa.
+				
+			</div>
+				
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("saludo.txt", "r", encoding="utf-8") as archivo:
+    primera = archivo.readline()
+    segunda = archivo.readline()
+	tercera = archivo.readline()
+
+print(primera.strip())
+print(segunda.strip())
+print(tercera.strip())</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">saludo.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Hola, mundo
+Segunda línea
+Tercera línea
+</pre>
+					</div>
+					<br>
+					<p>
+						<code>strip()</code> elimina el <code>\n</code> del final antes de imprimir.
+					</p>
+				</div>
+			</div>
+					
+			<div class="note-box">
+				<div class="note-title">📝 Nota:</div>
+				<p>
+					<code>strip()</code> elimina espacios y <code>\n</code> de <strong>ambos extremos</strong> de la 
+					cadena. Si solo quieres eliminar el salto de línea del final sin tocar posibles espacios al inicio, 
+					puedes usar <code>rstrip('\n')</code> que es más preciso:
+				</p>
+<pre>
+<code class="language-python">primera.rstrip('\n')   # Solo elimina \n al final
+primera.strip()        # Elimina espacios y \n en ambos extremos</code>
+</pre>
+			</div>					
+				
+				
+				
+			<div class="card">
+				<h3 class="sub"><code>🔧 readlines()</code></h3>
+				<p>
+					Lee todas las líneas como una lista.
+				
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    linea = archivo.readlines()</code>
+</pre>	
+			</div>
+			
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("frutas.txt", "r", encoding="utf-8") as archivo:
+    lineas = archivo.readlines()
+
+print(lineas)</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">frutas.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+['Manzana\n', 'Banana\n', 'Cereza\n', 'Durazno\n', 'Fresa\n']
+</pre>
+					</div>
+				</div>
+			</div>			
+				
+			<div class="card">
+				<h3 class="sub">🔄 Iteración directa (la forma más eficiente)</h3>
+				<p>
+					Lee todas las líneas como una lista.
+				
+					<h3 class="sub">🔤 Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    for linea in archivo:
+		print(linea.strip())</code>
+</pre>	
+				</p>
+			</div> 
+			
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("frutas.txt", "r", encoding="utf-8") as archivo:
+    for linea in archivo:
+        print(linea.strip())</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">frutas.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Manzana
+Banana
+Cereza
+Durazno
+Fresa
+</pre>
+					</div>
+				</div>
+			</div>		
+				
+				
+				
+
+			
+			<div class="tip-box">
+				<div class="tip-title">💡 Dato importante</div>
+				<p>
+					Cada línea leída de un archivo incluye el carácter <code>\n</code> al final. Usa 
+					<code>linea.strip()</code> para eliminar espacios y saltos de línea, o <code>linea.rstrip('\n')</code> 
+					para eliminar solo el salto de línea.
+				</p>
+			</div>
+			
+			<div class="warning-box">
+				<div class="warning-title">⚠️ Precaución:</div>
+				<p>
+					<strong>El modo <code>'w'</code> es destructivo.</strong>
+					<br>
+					Si abres un archivo existente con 
+					<code>open("mi_archivo.txt", "w")</code>, su contenido se <strong>borra completamente</strong> antes de 
+					que escribas algo. Verifica siempre si el archivo existe o usa <code>'a'</code> si quieres conservar el 
+					contenido anterior.
+				</p>
+			</div>
+			
+			<div class="warning-box">
+				<div class="warning-title">📝 Nota:</div>
+				<p>
+					<strong>Siempre especifica encoding="utf-8".</strong>
+					<br>
+					Si no lo haces, Python usará la codificación por defecto del sistema operativo (que en Windows puede ser 
+					<code>cp1252</code> o <code>latin-1</code>), lo que puede causar errores al leer caracteres como 
+					<code>á</code>, <code>é</code>, <code>ñ</code>, <code>ü</code>, etc. Especificar 
+					<code>encoding="utf-8"</code> garantiza compatibilidad entre sistemas.
+				</p>
+			</div>
+			
+						
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(1)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(3)">Siguiente: Archivos CSV →</button></div>
+		</div>
+		
+		<!-- ======================================================== -->
+		<!-- ===================== ARCHIVOS CSV ===================== -->
+		<!-- ======================================================== -->
+		<div class="section" id="section-3">
+			<div class="section-header">
+				<div class="section-icon icon-yellow"><i class="ti ti-file-type-csv"></i></div>
+				<div class="section-header-text">
+					<h2>Archivos CSV</h2>
+					<p>Lee y escribe archivos <code>.csv</code></p>
+				</div>
+			</div>
+			
+			<div class="card">
+				<p>
+					<strong>CSV</strong> (<em>Comma-Separated Values</em>, en español, Valores Separados por Comas) es un 
+					formato de archivo de texto plano donde los datos están organizados en filas y columnas.
+					<br>
+					Un archivo CSV es un archivo de texto donde cada línea representa una fila.
+					<br>
+					Ejemplo:
+				</p>
+<pre>
+nombre,edad,ciudad
+Ana,28,Ciudad de México
+Luis,35,Guadalajara
+María,22,Monterrey
+</pre>
+				<p>
+					Aunque el nombre dice "coma", el delimitador puede ser cualquier carácter (<code>;</code>, <code>\t</code>, 
+					<code>|</code>). Python incluye el módulo <code>csv</code> en su biblioteca estándar, que maneja 
+					correctamente casos como:
+					<ul style="padding-left: 30px;">
+						<li>Valores que contienen comas dentro de comillas: <code>"García, Ana"</code></li>
+						<li>Saltos de línea dentro de un campo</li>
+						<li>Caracteres especiales</li>
+					</ul>
+				</p>
+			</div>
+			
+			<div class="card">
+				<h3 class="sub">📦 Importar el módulo</h3>
+<pre>
+<code class="language-python">import csv</code>
+</pre>
+				<p>
+					No requiere instalación. Es parte de la biblioteca estándar.
+				</p>
+			</div>
+			
+			<div class="card">
+				<h3>✍️ Escritura de archivos CSV</h3>
+				<p>
+					La escritura de archivos CSV en Python permite guardar datos tabulares (filas y columnas) en archivos de 
+					texto donde los valores están separados por comas u otros delimitadores.
+				</p>
+			</div>
+				
+			<div class="card">
+				<h3 class="sub"><code>🏛️ csv.writer</code></h3>
+				<p>
+					Escribe datos en archivos CSV.
+				</p>
+				
+				<h3 class="sub">🔤 Sintaxis:</h3>
+<pre>
+<code class="language-python">with open("nombre_archivo.csv", mode="w", newline="", encoding="utf-8") as archivo:
+    escritor = csv.writer(archivo)</code>
+</pre>	
+				<p>
+					Donde:
+					<br>
+					<code>nombre_archivo.csv</code>: Nombre del archivo.
+					<br>
+					<code>mode="w"</code>: Modo de apertura.
+					<br>
+					<code>newline=""</code>: Evita el problema de que Python inserte líneas en blanco adicionales 
+											entre cada fila en sistemas operativos como Windows.
+					<br>
+					<code>encoding="utf-8"</code>: Asegura el soporte correcto para caracteres especiales, tildes y eñes.
+					<br>
+					<code>csv.writer(archivo)</code>: Crea el objeto escritor encargado de convertir las listas en filas con formato CSV.
+				</p>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+datos = [
+    ["NOMBRE", "EDAD", "CIUDAD"],          # Encabezado
+    ["Ana", 28, "Ciudad de México"],
+    ["Luis", 35, "Guadalajara"],
+    ["María", 22, "Monterrey"],
+]
+
+with open("personas.csv", "w", newline="", encoding="utf-8-sig") as archivo:
+    escritor = csv.writer(archivo)
+	
+	# Escribe todas las filas
+    escritor.writerows(datos)
+
+print("CSV creado.")</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+CSV creado.
+</pre>
+					</div>
+				</div>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo 2:</h3>
+				<p>
+					También puedes escribir fila por fila con <code>writerow()</code>:
+				</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+with open("personas.csv", "w", newline="", encoding="utf-8-sig") as archivo:
+    escritor = csv.writer(archivo)
+	
+    escritor.writerow(["NOMBRE", "EDAD", "CIUDAD"]) # encabezado
+	escritor.writerow(["Ana", 28, "Ciudad de México"])
+    escritor.writerow(["Luis", 35, "Guadalajara"])
+    escritor.writerow(["María", 22, "Monterrey"])
+
+print("CSV creado.")</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+CSV creado.
+</pre>
+					</div>
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">personas.csv</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+NOMBRE,EDAD,CIUDAD
+Ana,28,Ciudad de México
+Luis,35,Guadalajara
+María,22,Monterrey
+</pre>
+					</div>
+				</div>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub"><code>🏛️ csv.DictWriter</code></h3>
+				<p>
+					Escribe datos en archivos CSV usando diccionarios.
+					<br><br>
+					El método <code>csv.DictWriter()</code> funciona como un traductor automático. A diferencia del 
+					<code>csv.writer</code> básico (que necesita que le pases los datos en el orden exacto en el que 
+					van a aparecer), <code>DictWriter</code> utiliza las <strong>claves (keys) de tus diccionarios</strong> 
+					para saber exactamente en qué columna debe colocar cada dato, sin importar el orden en el que estén 
+					dentro del diccionario.
+				</p>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+# 1. Define el orden estricto de las columnas (encabezados)
+campos = ["NOMBRE", "EDAD", "CIUDAD"]
+
+# 2. Los datos se organizan como diccionarios
+personas = [
+    {"nombre": "Ana",   "edad": 28, "ciudad": "Ciudad de México"},
+    {"nombre": "Luis",  "edad": 35, "ciudad": "Guadalajara"},
+    {"nombre": "María", "edad": 22, "ciudad": "Monterrey"},
+]
+
+# 3. Abre el archivo y configura el DictWriter
+with open("personas.csv", "w", newline="", encoding="utf-8") as archivo:
+	# Vincula el archivo con las columnas que elegimos como encabezados
+    escritor = csv.DictWriter(archivo, fieldnames=campos)
+    
+	# 4. Escribe los encabezados (opcional, pero muy recomendado)
+	escritor.writeheader()
+	
+	# 5. Escribe los datos
+    escritor.writerows(personas)
+
+print("CSV creado.")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+CSV creado.
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">personas.csv</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+NOMBRE,EDAD,CIUDAD
+Ana,28,Ciudad de México
+Luis,35,Guadalajara
+María,22,Monterrey
+</pre>
+					</div>
+				</div>
+			</div>				
+								
+				
+			<div class="card">
+				<h3 class="sub">➕ Modo <code>'a'</code> - Agregar sin sobreescribir</h3>
+				<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "a", encoding="utf-8") as archivo:
+    archivo.write(cadena)</code>
+</pre>	
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">with open("frutas.txt", "a", encoding="utf-8") as archivo:
+    archivo.write("Durazno\n")
+    archivo.write("Fresa\n")</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-file">frutas.txt</span>
+					</div>
+
+					<div class="output-body-file">
+<pre>
+Manzana
+Banana
+Cereza
+Durazno
+Fresa
+</pre>
+					</div>
+					<br>
+					<p>
+						El contenido anterior de <code>frutas.txt</code> se conserva y las nuevas líneas se 
+						agregan al final.
+					</p>
+				</div>
+			</div>				
+			
+			
+			<div class="card">
+				<h3>📖 Lectura de archivos CSV</h3>				
+				<h3 class="sub"><code>🏛️ csv.reader</code></h3>
+				<p>
+					Lee <strong>todo</strong> el contenido del archivo y lo regresa como <code>str</code> con todo el 
+					contenido leído.
+				
+					<h3 class="sub">🔤 Sintaxis:</h3>
+				</p>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    contenido = archivo.read(size=-1)</code>
+</pre>	
+				<p>
+					Donde:
+					<br>
+					<code>size</code>: Número de caracteres a leer, Sin argumento (o <code>-1</code>) lee todo el 
+					archivo.
+				</p>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+with open("personas.csv", "r", encoding="utf-8") as archivo:
+    lector = csv.reader(archivo)
+
+    for fila in lector:
+        print(fila)</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+['NOMBRE', 'EDAD', 'CIUDAD']
+['Ana', '28', 'Ciudad de México']
+['Luis', '35', 'Guadalajara']
+['María', '22', 'Monterrey']
+</pre>
+					</div>
+				</div>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo 2: Para saltar el encabezado:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+with open("personas.csv", "r", encoding="utf-8") as archivo:
+    lector = csv.reader(archivo)
+    next(lector)   # Salta la primera fila (encabezado)
+
+    for fila in lector:
+        nombre, edad, ciudad = fila
+        print(f"{nombre} tiene {edad} años y vive en {ciudad}."))</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Ana tiene 28 años y vive en Ciudad de México.
+Luis tiene 35 años y vive en Guadalajara.
+María tiene 22 años y vive en Monterrey.
+</pre>
+					</div>
+				</div>
+			</div>
+				
+				
+			<div class="card">
+				<h3 class="sub"><code>🏛️ csv.DictReader</code> - Lectura como diccionarios</h3>
+				<p>
+					Cada fila se convierte en un diccionario donde las claves son los encabezados. Es la forma más 
+					recomendada.
+				</p>
+					<h3 class="sub">Sintaxis:</h3>
+<pre>
+<code class="language-python">with open(file, "r", encoding="utf-8") as archivo:
+    linea = archivo.readline(size=-1)</code>
+</pre>	
+				<p>
+					Donde:
+					<br>
+					<code>size</code>: Número máximo de caracteres a leer de la línea. Sin argumento lee la línea completa.
+				</p>
+			</div>
+			
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+with open("personas.csv", "r", encoding="utf-8") as archivo:
+    lector = csv.DictReader(archivo)
+
+    for fila in lector:
+        print(fila["nombre"], "-", fila["ciudad"])</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Ana - Ciudad de México
+Luis - Guadalajara
+María - Monterrey
+</pre>
+					</div>							
+				</div>
+			</div>
+					
+			<div class="card">
+				<h3 class="sub">💻 Ejemplo 2:</h3>
+				<p>
+					Puedes convertir todas las filas en una lista de diccionarios:
+				</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+with open("personas.csv", "r", encoding="utf-8") as archivo:
+    lector = csv.DictReader(archivo)
+    personas = list(lector)
+
+print(personas[0])</code>
+</pre>
+					</div>
+
+					<div class="snippet-bar output-bar">
+					  <span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+{'nombre': 'Ana', 'edad': '28', 'ciudad': 'Ciudad de México'}
+</pre>
+					</div>							
+				</div>
+			</div>
+					
+			<div class="note-box">
+				<div class="note-title">📝 Nota:</div>
+				<p>
+					<code>strip()</code> elimina espacios y <code>\n</code> de <strong>ambos extremos</strong> de la 
+					cadena. Si solo quieres eliminar el salto de línea del final sin tocar posibles espacios al inicio, 
+					puedes usar <code>rstrip('\n')</code> que es más preciso:
+				</p>
+<pre>
+<code class="language-python">primera.strip('\n')   # Solo elimina \n al final
+primera.rstrip()      # Elimina espacios y \n en ambos extremos</code>
+</pre>
+			</div>
+				
+				
+			<div class="card">
+				<h3 class="sub">⚙️ Parámetros del dialecto CSV</h3>
+				<p>
+					Puedes personalizar el delimitador, comillas, etc.:
+				</p>
+				
+					<h3 class="sub">💻 Ejemplo:</h3>
+					<div class="snippet">
+						<div class="snippet-bar">
+						  <div class="dots"><span></span><span></span><span></span></div>
+						  <span class="snippet-title">Python</span>
+						  <span class="snippet-tag tag-fn">ejemplo</span>
+						</div>
+						<div class="code-wrap">
+							<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">import csv
+
+# Leer CSV con punto y coma (común en Europa y LATAM)
+with open("datos.csv", "r", encoding="utf-8") as archivo:
+    lector = csv.reader(archivo, delimiter=";")
+    for fila in lector:
+        print(fila)
+
+# Escribir CSV separado por tabulaciones (TSV)
+with open("datos.tsv", "w", newline="", encoding="utf-8") as archivo:
+    escritor = csv.writer(archivo, delimiter="\t")
+    escritor.writerow(["nombre", "edad"])
+    escritor.writerow(["Ana", 28])</code>
+</pre>
+						</div>
+
+						<div class="snippet-bar output-bar">
+						  <span class="snippet-tag tag-output">saludo.txt</span>
+						</div>
+
+						<div class="output-body">
+<pre>
+...
+</pre>
+						</div>							
+					</div>
+				
+					
+				<p>
+					Parámetros más usados:
+				</p>
+				<table class="comparison-table table-compact">
+					<thead>
+						<tr>
+							<th>Parámetro</th>
+							<th>Descripción</th>
+							<th>Por defecto</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<code>delimiter</code>
+							</td>
+							<td>
+								Carácter separador de campos
+							</td>
+							<td>
+								<code>','</code>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>quotechar</code>
+							</td>
+							<td>
+								Carácter para encerrar campos con el delimitador
+							</td>
+							<td>
+								<code>'"'</code>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>quoting</code>
+							</td>
+							<td>
+								Política de uso de comillas
+							</td>
+							<td>
+								<code>QUOTE_MINIMAL</code>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<code>lineterminator</code>
+							</td>
+							<td>
+								Carácter de fin de línea
+							</td>
+							<td>
+								<code>'\r\n'</code>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+				
+			<div class="warning-box">
+					<div class="warning-title">⚠️ Precaución:</div>
+					<p>
+						<strong>¡No olvides <code>newline=""</code> al abrir un CSV para escritura en Python!</strong>
+					</p>
+<pre>
+<code class="language-python">open("archivo.csv", "w", newline="")  # ✅ Correcto
+open("archivo.csv", "w")              # ❌ Genera líneas vacías entre filas en Windows</code>
+</pre>
+			</div>
+				
+			<div class="tip-box">
+					<div class="tip-title">💡 Tip:</div>
+					<p>
+						<strong>Todos los valores leídos con <code>csv.reader</code> son cadenas (<code>str</code>).</strong>
+						Si necesitas números, conviértelos explícitamente:
+					</p>
+<pre>
+<code class="language-python">edad = int(fila["edad"])
+precio = float(fila["precio"])</code>
+</pre>
+			</div>
+			
+			<div class="note-box">
+					<div class="note-title">📝 Nota:</div>
+					<p>
+						<strong>CSV con Excel.</strong>
+						Excel en algunas configuraciones suele generar archivos CSV con <code>;</code> como delimitador 
+						(no con <code>,</code>), porque la coma se usa como separador decimal. Si recibes un CSV de 
+						Excel que no se lee bien, prueba con <code>delimiter=";"</code>.
+					</p>
+<pre>
+<code class="language-python">edad = int(fila["edad"])
+precio = float(fila["precio"])</code>
+</pre>
+			</div>
+				
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(2)">← Anterior</button><button class="nav-arrow-btn" disabled>🏁 Fin del tutorial</button></div>
+		</div>
+					
+		
+
+
+    </main>
+
+    <footer class="footer-m365">
+		<div class="footer-content">
+			<div class="footer-top-bar"></div>
+			<p class="footer-m365-title">Curso Fundamentos de Python</p>
+			<p class="footer-m365-label">Módulo Estructuras de Repetición</p>
+			<div class="footer-banner" >
+				<div class="footer-text">
+					<span class="label">Instructor: </span>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoM.png" alt="Logo" style="height: 44px;"><span class="name">anuel</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoA.png" alt="Logo" style="height: 40px;"><span class="name">lejandro</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoL.png" alt="Logo"><span class="name">ópez</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoZ.png" alt="Logo"><span class="name">epeda</span>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom-bar"></div>
+		</div>
+	</footer>
+
+    <script>		
+        let currentSection = 0; const totalSections = 4;
+        function goToSection(index) { if (index < 0 || index >= totalSections) return; document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); const target = document.getElementById('section-' + index); if (target) target.classList.add('active'); currentSection = index; document.querySelectorAll('.nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index)); updateProgress(); window.scrollTo({ top: 0, behavior: 'smooth' }); document.getElementById('scorePanel').style.display = index === 8 ? 'block' : 'none'; if (index === 9 && typeof _editors !== 'undefined') { setTimeout(() => { Object.values(_editors).forEach(({ cm }) => cm.refresh()); }, 50); } }
+        function updateProgress() { document.getElementById('progressFill').style.width = ((currentSection + 1) / totalSections * 100) + '%'; document.getElementById('progressText').textContent = 'Sección ' + (currentSection + 1) + ' de ' + totalSections; }
+        // ===== QUIZ =====
+        const questions = [
+          {
+            text: '¿Qué palabra clave se utiliza en Python para definir una función?',
+            code: null,
+            opts: ['function', 'def', 'fun', 'define'],
+            ans: 1,
+            exp: 'En Python las funciones se definen con la palabra clave <code>def</code>, seguida del nombre, paréntesis y dos puntos: <code>def mi_funcion():</code>'
+          },
+          {
+            text: '¿Qué devuelve una función que NO tiene instrucción <code>return</code>?',
+            code: 'def saludar():\n    print("Hola")\n\nresultado = saludar()\nprint(resultado)',
+            opts: ['0', 'False', 'None', 'Lanza un error'],
+            ans: 2,
+            exp: 'Toda función sin <code>return</code> (o con <code>return</code> vacío) devuelve <code>None</code> implícitamente.'
+          },
+          {
+            text: '¿Qué imprime este código?',
+            code: 'def potencia(base, exponente=2):\n    return base ** exponente\n\nprint(potencia(3))',
+            opts: ['9', '6', '8', 'TypeError'],
+            ans: 0,
+            exp: 'Como no se pasa el segundo argumento, se usa el valor por defecto <code>exponente=2</code>. Entonces <code>3 ** 2 = 9</code>.'
+          },
+          {
+            text: '¿Cuál de las siguientes definiciones causa un <code>SyntaxError</code>?',
+            code: null,
+            opts: [
+              'def f(a, b=10):',
+              'def f(a=5, b=10):',
+              'def f(a=5, b):',
+              'def f(a, b, c=0):'
+            ],
+            ans: 2,
+            exp: 'Los parámetros con valor por defecto siempre deben ir DESPUÉS de los parámetros sin default. Poner <code>a=5</code> antes de <code>b</code> (sin default) genera un <code>SyntaxError</code>.'
+          },
+          {
+            text: '¿Qué tipo de función es <code>cuadrado = lambda x: x ** 2</code>?',
+            code: null,
+            opts: [
+              'Una función recursiva',
+              'Una función anónima de una sola línea (lambda)',
+              'Una función con parámetros por nombre',
+              'Una función sin parámetros'
+            ],
+            ans: 1,
+            exp: 'Las funciones <code>lambda</code> son funciones anónimas (sin nombre) de una sola expresión. Son equivalentes a <code>def cuadrado(x): return x ** 2</code>.'
+          },
+          {
+            text: '¿Qué imprime este código?',
+            code: 'def menor_mayor(a, b):\n    return min(a, b), max(a, b)\n\np, q = menor_mayor(8, 3)\nprint(p, q)',
+            opts: ['8 3', '3 8', '(3, 8)', 'TypeError'],
+            ans: 1,
+            exp: '<code>return min(a,b), max(a,b)</code> devuelve una tupla <code>(3, 8)</code>. Al hacer <code>p, q = ...</code> se desempaqueta: <code>p=3</code>, <code>q=8</code>. Se imprime <code>3 8</code>.'
+          },
+          {
+            text: '¿Qué hace el símbolo <code>*</code> solo en la firma de esta función?',
+            code: 'def conectar(host, *, timeout=30):\n    pass',
+            opts: [
+              'Indica que la función acepta cualquier número de argumentos posicionales',
+              'Actúa como separador: todo lo que sigue solo puede pasarse por nombre (keyword-only)',
+              'Es un error de sintaxis',
+              'Hace que el parámetro timeout sea obligatorio'
+            ],
+            ans: 1,
+            exp: 'El <code>*</code> solo como separador indica que los parámetros que le siguen (<code>timeout</code>) son <em>keyword-only</em>: deben pasarse obligatoriamente por nombre, no por posición.'
+          },
+          {
+            text: '¿Qué imprime este código?',
+            code: 'def sumar(*nums):\n    return sum(nums)\n\nprint(sumar(1, 2, 3, 4))',
+            opts: ['[1, 2, 3, 4]', '10', '(1, 2, 3, 4)', 'Error'],
+            ans: 1,
+            exp: '<code>*nums</code> empaqueta todos los argumentos posicionales en una tupla. <code>sum((1,2,3,4))</code> devuelve <code>10</code>.'
+          },
+          {
+            text: '¿Cuál es la característica principal de una función recursiva?',
+            code: null,
+            opts: [
+              'Que no tiene parámetros',
+              'Que retorna siempre None',
+              'Que se llama a sí misma y tiene un caso base que detiene la recursión',
+              'Que solo acepta argumentos por nombre'
+            ],
+            ans: 2,
+            exp: 'Una función recursiva se llama a sí misma. La clave es tener un <strong>caso base</strong> que detenga la recursión; sin él, la función se llamaría infinitamente hasta generar un <code>RecursionError</code>.'
+          },
+          {
+            text: '¿Qué devuelve <code>divmod(17, 5)</code>?',
+            code: null,
+            opts: ['3', '2', '(3, 2)', '3.4'],
+            ans: 2,
+            exp: '<code>divmod(x, y)</code> es una función built-in que devuelve una tupla <code>(cociente, residuo)</code>. 17 ÷ 5 = 3 con residuo 2, por eso devuelve <code>(3, 2)</code>.'
+          }
+        ];
+
+        let currentQ = 0;
+        let quizScore = 0;
+        let answered = false;
+
+        function renderQuestion() {
+          const q = questions[currentQ];
+
+          // Construir el HTML de la pregunta separando texto y código
+          let questionHTML =
+            '<span style="color:var(--text-muted);font-size:0.8rem;">Pregunta ' + (currentQ+1) + ' de ' + questions.length + '</span><br><br>' +
+            '<p style="font-family:Segoe UI,Tahoma,sans-serif;font-size:1em;font-weight:600;color:var(--text-light);margin-bottom:' + (q.code ? '12px' : '0') + ';line-height:1.6;">' + q.text + '</p>';
+
+          if (q.code) {
+            questionHTML +=
+              '<pre style="font-family:Consolas,Monaco,monospace;font-size:0.88em;line-height:1.8;' +
+              'background:var(--bg-code);border:1px solid rgba(48,105,152,0.3);border-radius:8px;' +
+              'padding:12px 16px;color:var(--python-yellow);white-space:pre;overflow-x:auto;margin-top:4px;">' +
+              q.code.replace(/\\n/g, '\n') + '</pre>';
+          }
+
+          document.getElementById('quizQ').innerHTML = questionHTML;
+
+          const optsEl = document.getElementById('quizOpts');
+          optsEl.innerHTML = '';
+          q.opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt';
+            // Opciones: texto normal (sin código de bloque)
+            btn.innerHTML =
+              '<span style="color:var(--python-blue-light);font-weight:700;margin-right:10px;">' + String.fromCharCode(65+i) + '.</span>' +
+              '<span style="font-family:Segoe UI,Tahoma,sans-serif;white-space:pre-wrap;">' + opt + '</span>';
+            btn.onclick = () => answerQ(i, btn);
+            optsEl.appendChild(btn);
+          });
+          document.getElementById('quizFeedback').classList.remove('show');
+          document.getElementById('quizNext').classList.remove('show');
+          answered = false;
+        }
+
+        function answerQ(idx, btn) {
+          if (answered) return;
+          answered = true;
+          const q = questions[currentQ];
+          const allBtns = document.querySelectorAll('.quiz-opt');
+          const fb = document.getElementById('quizFeedback');
+          const nxt = document.getElementById('quizNext');
+          if (idx === q.ans) {
+            btn.classList.add('correct');
+            fb.className = 'quiz-feedback show ok';
+            fb.innerHTML = '✅ <strong>¡Correcto!</strong> ' + q.exp;
+            quizScore++;
+            document.getElementById('scoreValue').textContent = quizScore;
+          } else {
+            btn.classList.add('wrong');
+            allBtns[q.ans].classList.add('correct');
+            fb.className = 'quiz-feedback show fail';
+            fb.innerHTML = '❌ <strong>Incorrecto.</strong> ' + q.exp;
+          }
+          nxt.classList.add('show');
+          if (currentQ === questions.length - 1) { nxt.textContent = 'Ver resultado 🎉'; }
+        }
+
+        function nextQuestion() {
+          currentQ++;
+          if (currentQ >= questions.length) { showQuizResult(); } else { renderQuestion(); }
+        }
+
+        function showQuizResult() {
+          document.getElementById('quizContainer').style.display = 'none';
+          const r = document.getElementById('quizResult');
+          r.style.display = 'block';
+		  document.querySelector('#section-8 .nav-buttons .nav-arrow-btn:last-child').disabled = false;
+          const pct = Math.round((quizScore / questions.length) * 100);
+          document.getElementById('quizScore').textContent = quizScore + ' / ' + questions.length + ' (' + pct + '%)';
+          const msgs = [
+            [80, '🏆 ¡Excelente! Dominas las estructuras de iteración de Python.'],
+            [60, '👍 Bien hecho. Repasa break/continue/else para perfeccionar.'],
+            [0,  '📚 Sigue practicando. Revisa los ejemplos interactivos del tutorial.']
+          ];
+          document.getElementById('quizMsg').textContent = msgs.find(([min]) => pct >= min)[1];
+        }
+
+        function restartQuiz() {
+          currentQ = 0; quizScore = 0; answered = false;
+          document.getElementById('quizContainer').style.display = 'block';
+          document.getElementById('quizResult').style.display = 'none';
+          renderQuestion();
+        }
+		
+		/*
+		function finishTutorial() {
+          //alert('🎉 ¡Felicidades! Completaste el tutorial.\nPuntaje final: ' + quizScore + ' / ' + questions.length + '\n\nAhora pon en práctica lo aprendido en los ejercicios. ¡Éxito!');
+          goToSection(9);
+        }
+		*/
+
+        renderQuestion();
+        function runDemo1() { const edad = parseInt(document.getElementById('demo1-edad').value); const output = document.getElementById('demo1-output'); output.classList.add('has-output'); if (isNaN(edad)) { output.textContent = '⚠️ Ingresa un número válido.'; return; } output.textContent = (edad >= 18 ? 'Eres mayor de edad' : '') + '\nFin del programa'; }
+        function runDemo2() { const n = parseInt(document.getElementById('demo2-numero').value); const output = document.getElementById('demo2-output'); output.classList.add('has-output'); if (isNaN(n)) { output.textContent = '⚠️ Ingresa un número válido.'; return; } output.textContent = n + (n % 2 === 0 ? ' es par ✅' : ' es impar 🔵'); }
+        function runDemo3() { const nota = parseInt(document.getElementById('demo3-nota').value); const output = document.getElementById('demo3-output'); output.classList.add('has-output'); if (isNaN(nota) || nota < 0 || nota > 100) { output.textContent = '⚠️ Nota válida entre 0 y 100.'; return; } let r = nota >= 90 ? '🏆 Excelente - A' : nota >= 80 ? '👍 Muy bien - B' : nota >= 70 ? '📝 Bien - C' : nota >= 60 ? '⚠️ Suficiente - D' : '❌ Reprobado - F'; output.textContent = 'Nota: ' + nota + '/100\nResultado: ' + r; }
+        function runDemo4() { const a = parseFloat(document.getElementById('demo4-a').value); const b = parseFloat(document.getElementById('demo4-b').value); const output = document.getElementById('demo4-output'); output.classList.add('has-output'); if (isNaN(a) || isNaN(b)) { output.textContent = '⚠️ Ingresa números válidos.'; return; } let r = 'a = ' + a + ', b = ' + b + '\n\na > b: ' + (a>b) + '\na < b: ' + (a<b) + '\na == b: ' + (a===b) + '\na != b: ' + (a!==b) + '\n\na > 0 and b > 0: ' + (a>0&&b>0) + '\na > 0 or b > 0: ' + (a>0||b>0) + '\nnot (a > b): ' + !(a>b); output.textContent = r; }
+        function runDemo5() { const u = document.getElementById('demo5-user').value; const p = document.getElementById('demo5-pass').value; const r = document.getElementById('demo5-role').value; const output = document.getElementById('demo5-output'); output.classList.add('has-output'); if (u === 'admin' && p === '1234') { output.textContent = '✅ Login exitoso\n' + (r === 'administrador' ? '🔓 Acceso total' : r === 'editor' ? '✏️ Acceso de edición' : '👁️ Solo lectura'); } else { output.textContent = '❌ Credenciales incorrectas'; } }
+        function runDemo6() { const n = parseFloat(document.getElementById('demo6-num').value); const output = document.getElementById('demo6-output'); output.classList.add('has-output'); if (isNaN(n)) { output.textContent = '⚠️ Ingresa un número válido.'; return; } const tipo = n > 0 ? 'positivo' : n < 0 ? 'negativo' : 'cero'; const abs = n >= 0 ? n : -n; const par = n === 0 ? 'cero' : Math.abs(n) % 2 === 0 ? 'par' : 'impar'; output.textContent = 'Número: ' + n + '\nTipo: ' + tipo + '\nValor absoluto: ' + abs + '\nEs: ' + par; }
+        function runDemo7() { const dia = document.getElementById('demo7-dia').value; const output = document.getElementById('demo7-output'); output.classList.add('has-output'); let r = 'match dia:\n'; let m = ''; switch(dia) { case 'lunes': r += '    case "lunes":\n'; m = '💪 Inicio de semana'; break; case 'viernes': r += '    case "viernes":\n'; m = '🎉 ¡Casi fin de semana!'; break; case 'sábado': case 'domingo': r += '    case "sábado" | "domingo":\n'; m = '🏖️ Fin de semana'; break; default: r += '    case _:\n'; m = '📅 Día normal'; } r += '        print("' + m + '")\n\n📤 Salida:\n' + m; output.textContent = r; }
+		
+        // ===== SIMULADOR CORREGIDO CON SOPORTE PARA IF/ELIF/ELSE =====
+        function runEditor(num) {
+            const challengeBoxes = document.querySelectorAll('#section-8 .challenge-box');
+            const box = challengeBoxes[num - 1]; if (!box) return;
+            const instructionsDiv = box.querySelector('.editor-instructions');
+            const instructionsText = instructionsDiv ? instructionsDiv.innerText : '';
+            const textarea = document.getElementById('editor-' + num);
+            const fullCode = instructionsText + textarea.value;
+            const output = document.getElementById('output-' + num);
+            try { const result = simulatePython(fullCode); output.className = 'editor-output success'; output.textContent = result || '(Sin salida)'; } catch (e) { output.className = 'editor-output error'; output.textContent = '❌ Error: ' + e.message; }
+        }
+
+        function simulatePython(code) {
+            const lines = code.split('\n');
+            let output = [];
+            let variables = {};
+
+            function getIndent(line) { const m = line.match(/^(\s*)/); return m ? m[1].length : 0; }
+            function isEmpty(line) { const t = line.trim(); return t === '' || t.startsWith('#'); }
+
+            function evaluateCondition(cond) {
+                let expr = cond.trim();
+                for (let vn in variables) {
+                    const re = new RegExp('\\b' + vn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+                    const val = variables[vn];
+                    if (typeof val === 'number') expr = expr.replace(re, val);
+                    else if (typeof val === 'string') expr = expr.replace(re, '"' + val.replace(/"/g, '\\"') + '"');
+                }
+                expr = expr.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||').replace(/\bnot\b/g, '!');
+                try { return !!Function('"use strict"; return (' + expr + ')')(); } catch(e) { return false; }
+            }
+
+            function evaluateExpression(expr) {
+                let e = expr.trim();
+                for (let vn in variables) {
+                    const re = new RegExp('\\b' + vn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+                    const val = variables[vn];
+                    if (typeof val === 'number') e = e.replace(re, val);
+                    else if (typeof val === 'string') e = e.replace(re, '"' + val.replace(/"/g, '\\"') + '"');
+                }
+                e = e.replace(/\bTrue\b/g, 'true').replace(/\bFalse\b/g, 'false');
+                e = e.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||').replace(/\bnot\b/g, '!');
+                try { return Function('"use strict"; return (' + e + ')')(); } catch(e) { return expr; }
+            }
+
+            function processPrint(content) {
+                if (content.startsWith('f"') || content.startsWith("f'")) {
+                    let str = content.slice(2, -1);
+                    str = str.replace(/\{([^}]+)\}/g, (m, expr) => { try { return evaluateExpression(expr.trim()); } catch(e) { return m; } });
+                    output.push(str);
+                } else {
+                    if ((content.startsWith('"') && content.endsWith('"')) || (content.startsWith("'") && content.endsWith("'"))) output.push(content.slice(1, -1));
+                    else { try { output.push(String(evaluateExpression(content))); } catch(e) { output.push(content); } }
+                }
+            }
+
+            function processAssignment(line) {
+                const m = line.trim().match(/^(\w+)\s*=\s*(.+)$/);
+                if (m) {
+                    const vn = m[1]; let val = m[2].trim();
+                    if (val.startsWith('f"') || val.startsWith("f'")) {
+                        let s = val.slice(2, -1); s = s.replace(/\{([^}]+)\}/g, (mm, ex) => { try { return evaluateExpression(ex.trim()); } catch(e) { return mm; } }); variables[vn] = s;
+                    } else if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) { variables[vn] = val.slice(1, -1); }
+                    else { try { variables[vn] = evaluateExpression(val); } catch(e) { variables[vn] = val; } }
+                    return true;
+                }
+                return false;
+            }
+
+            function skipBlock(start, baseInd) {
+                let i = start;
+                while (i < lines.length) { const l = lines[i]; if (isEmpty(l)) { i++; continue; } if (getIndent(l) <= baseInd) return i; i++; }
+                return i;
+            }
+
+            function processIfChain(start, chainInd) {
+                let i = start;
+                let satisfied = false;
+                while (i < lines.length) {
+                    const line = lines[i]; if (isEmpty(line)) { i++; continue; }
+                    const ind = getIndent(line);
+                    if (ind < chainInd) break;
+                    if (ind > chainInd) { i++; continue; }
+                    const trimmed = line.trim();
+                    const ifM = trimmed.match(/^if\s+(.+):$/);
+                    const elifM = trimmed.match(/^elif\s+(.+):$/);
+                    const elseM = trimmed.match(/^else:$/);
+                    if (!ifM && !elifM && !elseM) break;
+
+                    if (!satisfied) {
+                        if (ifM && evaluateCondition(ifM[1])) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                        if (elifM && evaluateCondition(elifM[1])) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                        if (elseM) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                    }
+                    i = skipBlock(i + 1, chainInd);
+                }
+                return i;
+            }
+
+            function executeBlock(start, baseInd) {
+                let i = start;
+                while (i < lines.length) {
+                    const line = lines[i]; if (isEmpty(line)) { i++; continue; }
+                    const ind = getIndent(line); if (ind <= baseInd) return i;
+                    const trimmed = line.trim();
+                    if (trimmed.match(/^if\s+(.+):$/)) { i = processIfChain(i, ind); continue; }
+                    const pm = trimmed.match(/^print\((.+)\)$/);
+                    if (pm) { processPrint(pm[1]); i++; continue; }
+                    if (processAssignment(trimmed)) { i++; continue; }
+                    i++;
+                }
+                return i;
+            }
+
+            executeBlock(0, -1);
+            return output.join('\n');
+        }
+
+        function toggleSolution(num) { document.getElementById('solution-' + num).classList.toggle('visible'); }
+        document.addEventListener('keydown', function(e) { if (e.target.tagName === 'TEXTAREA') { if (e.key === 'Tab') { e.preventDefault(); const s = e.target.selectionStart; e.target.value = e.target.value.substring(0, s) + '    ' + e.target.value.substring(e.target.selectionEnd); e.target.selectionStart = e.target.selectionEnd = s + 4; } return; } if (e.key === 'ArrowRight' && currentSection < totalSections - 1) goToSection(currentSection + 1); else if (e.key === 'ArrowLeft' && currentSection > 0) goToSection(currentSection - 1); });
+        updateProgress();
+		
+		
+
+
+		
+		
+    </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script>
+  function addLineNumbers() {
+    document.querySelectorAll('.code-wrap').forEach(wrap => {
+      const code = wrap.querySelector('code');
+      const col  = wrap.querySelector('.line-numbers-col');
+      if (!code || !col) return;
+      const lines = code.textContent.split('\n');
+      const count = lines[lines.length - 1].trim() === '' ? lines.length - 1 : lines.length;
+      col.innerHTML = Array.from({ length: count }, (_, i) => `<span>${i + 1}</span>`).join('');
+    });
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.Prism) Prism.hooks.add('complete', addLineNumbers);
+    setTimeout(addLineNumbers, 400);
+  });
+</script>
+</body>
+</html>
